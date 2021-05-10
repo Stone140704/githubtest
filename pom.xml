@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>testgithub</groupId>
+    <artifactId>githubtest1</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>githubtest1</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+    
+    <dependencies>
+        <!-- 依赖 junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <!-- 指定包名 -->
+        <finalName>test</finalName>
+        <!-- 指定源文件目录:默认所有配置的源文件目录 ,配置多个源文件目录可以通过插件实现: build-helper-maven-plugin -->
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <plugins>
+            <plugin>
+                <!-- MAVEN 编译使用的JDK版本 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <!-- 设置Maven编译编码 -->
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+    
+            <plugin>
+                <!-- 将依赖打入到jar包内部 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+    
+            <plugin>
+                <!-- 打包后将jar复制到指定目录 -->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <!-- 复制单个文件:指定文件名 -->
+                                <copy overwrite="true" tofile="test.jar"
+                                      file="${project.build.directory}/test-jar-with-dependencies.jar"/>
+                                <!-- 复制多个文件 -->
+                                <!--                                <copy todir="eslib" overwrite="true" >-->
+                                <!--                                    <fileset dir="${project.build.directory}" erroronmissingdir="false">-->
+                                <!--                                        <include name="*.jar"/>-->
+                                <!--                                    </fileset>-->
+                                <!--                                </copy>-->
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <defaultGoal>compile</defaultGoal>
+    </build>
+</project>
